@@ -11,7 +11,8 @@ C++ evaluation for top-k recommendation
 import os
 import sys
 import threading
-import tensorflow as tf
+from tensorflow.compat import v1 as tf
+# import tensorflow as tf
 from tensorflow.python.client import device_lib
 from utility.helper import *
 from utility.batch_test import *
