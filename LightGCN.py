@@ -12,6 +12,7 @@ import os
 import sys
 import threading
 from tensorflow.compat import v1 as tf
+tf.disable_v2_behavior()
 # import tensorflow as tf
 from tensorflow.python.client import device_lib
 from utility.helper import *
