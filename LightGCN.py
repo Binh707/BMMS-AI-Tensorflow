@@ -269,16 +269,19 @@ class LightGCN(object):
                 temp_embed.append(tf.sparse_tensor_dense_matmul(A_fold_hat[f], ego_embeddings))
 
             side_embeddings = tf.concat(temp_embed, 0)
-            sum_embeddings = tf.nn.leaky_relu(tf.matmul(side_embeddings, self.weights['W_gc_%d' % k]) + self.weights['b_gc_%d' % k])
-
-
+            # sum_embeddings = tf.nn.leaky_relu(tf.matmul(side_embeddings, self.weights['W_gc_%d' % k]) + self.weights['b_gc_%d' % k])
+            sum_embeddings = side_embeddings
 
             # bi messages of neighbors.
             bi_embeddings = tf.multiply(ego_embeddings, side_embeddings)
+
+            self_embeddings = tf.matmul(tf.sparse.eye(side_embeddings.shape[0]), side_embeddings)
+
             # transformed bi messages of neighbors.
-            bi_embeddings = tf.nn.leaky_relu(tf.matmul(bi_embeddings, self.weights['W_bi_%d' % k]) + self.weights['b_bi_%d' % k])
+            # bi_embeddings = tf.nn.leaky_relu(tf.matmul(bi_embeddings, self.weights['W_bi_%d' % k]) + self.weights['b_bi_%d' % k])
+
             # non-linear activation.
-            ego_embeddings = sum_embeddings + bi_embeddings
+            ego_embeddings = sum_embeddings + bi_embeddings + self_embeddings
 
             # message dropout.
             # ego_embeddings = tf.nn.dropout(ego_embeddings, 1 - self.mess_dropout[k])
@@ -288,8 +291,8 @@ class LightGCN(object):
 
             all_embeddings += [norm_embeddings]
 
-        all_embeddings = tf.concat(all_embeddings, 1)
-        u_g_embeddings, i_g_embeddings = tf.split(all_embeddings, [self.n_users, self.n_items], 0)
+        # all_embeddings = tf.concat(all_embeddings, 1)
+        u_g_embeddings, i_g_embeddings = tf.split(all_embeddings[-1], [self.n_users, self.n_items], 0)
         return u_g_embeddings, i_g_embeddings
     
     
