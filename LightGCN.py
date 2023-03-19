@@ -275,7 +275,7 @@ class LightGCN(object):
             # bi messages of neighbors.
             bi_embeddings = tf.multiply(ego_embeddings, side_embeddings)
 
-            self_embeddings = tf.matmul(tf.sparse.eye(tf.shape(ego_embeddings)[0]), ego_embeddings)
+            self_embeddings = tf.matmul(tf.sparse.eye(self.n_users, self.n_items), ego_embeddings)
 
             # transformed bi messages of neighbors.
             # bi_embeddings = tf.nn.leaky_relu(tf.matmul(bi_embeddings, self.weights['W_bi_%d' % k]) + self.weights['b_bi_%d' % k])
