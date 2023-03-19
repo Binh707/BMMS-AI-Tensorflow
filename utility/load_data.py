@@ -139,7 +139,8 @@ class Data(object):
             print('check normalized adjacency matrix whether equal to this laplacian matrix.')
             return temp
         
-        norm_adj_mat = normalized_adj_single(adj_mat + sp.eye(adj_mat.shape[0]))
+        # norm_adj_mat = normalized_adj_single(adj_mat + sp.eye(adj_mat.shape[0]))
+        norm_adj_mat = normalized_adj_single(adj_mat)
         mean_adj_mat = normalized_adj_single(adj_mat)
         
         print('already normalize adjacency matrix', time() - t2)
