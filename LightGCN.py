@@ -291,7 +291,10 @@ class LightGCN(object):
 
             all_embeddings += [norm_embeddings]
 
-        all_embeddings = tf.concat(all_embeddings, 1)
+        all_embeddings=tf.stack(all_embeddings,1)
+        all_embeddings=tf.reduce_mean(all_embeddings,axis=1,keepdims=False)
+
+        # all_embeddings = tf.concat(all_embeddings, 1)
         u_g_embeddings, i_g_embeddings = tf.split(all_embeddings, [self.n_users, self.n_items], 0)
         return u_g_embeddings, i_g_embeddings
     
