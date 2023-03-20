@@ -275,13 +275,13 @@ class LightGCN(object):
             # bi messages of neighbors.
             bi_embeddings = tf.multiply(ego_embeddings, side_embeddings)
 
-            self_embeddings = tf.sparse_tensor_dense_matmul(tf.sparse.eye(self.n_users + self.n_items, dtype=tf.float32), ego_embeddings)
+            # self_embeddings = tf.sparse_tensor_dense_matmul(tf.sparse.eye(self.n_users + self.n_items, dtype=tf.float32), ego_embeddings)
 
             # transformed bi messages of neighbors.
             # bi_embeddings = tf.nn.leaky_relu(tf.matmul(bi_embeddings, self.weights['W_bi_%d' % k]) + self.weights['b_bi_%d' % k])
 
             # non-linear activation.
-            ego_embeddings = sum_embeddings + bi_embeddings + self_embeddings
+            ego_embeddings = sum_embeddings + bi_embeddings
 
             # message dropout.
             # ego_embeddings = tf.nn.dropout(ego_embeddings, 1 - self.mess_dropout[k])
