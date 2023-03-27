@@ -30,7 +30,7 @@ class LightGCN(object):
         self.pretrain_data = pretrain_data
         self.n_users = data_config['n_users']
         self.n_items = data_config['n_items']
-        self.n_fold = 100
+        self.n_fold = 50
         self.norm_adj = data_config['norm_adj']
         self.n_nonzero_elems = self.norm_adj.count_nonzero()
         self.lr = args.lr
