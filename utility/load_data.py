@@ -93,12 +93,12 @@ class Data(object):
         except Exception:
             adj_mat = adj_mat
             rowsum = np.array(adj_mat.sum(1))
-            d_inv = np.power(rowsum, -0.5).flatten()
+            d_inv = np.power(rowsum, -1.0).flatten() #-0.5
             
             d_inv[np.isinf(d_inv)] = 0.
             d_mat_inv = sp.diags(d_inv)
             norm_adj = d_mat_inv.dot(adj_mat)
-            norm_adj = norm_adj.dot(d_mat_inv)
+            # norm_adj = norm_adj.dot(d_mat_inv)
             print('generate pre adjacency matrix.')
             pre_adj_mat = norm_adj.tocsr()
             # norm_adj = adj_mat
