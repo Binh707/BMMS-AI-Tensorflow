@@ -281,7 +281,7 @@ class LightGCN(object):
             # bi_embeddings = tf.nn.leaky_relu(tf.matmul(bi_embeddings, self.weights['W_bi_%d' % k]) + self.weights['b_bi_%d' % k])
 
             # non-linear activation.
-            ego_embeddings = sum_embeddings + bi_embeddings
+            ego_embeddings = bi_embeddings # sum_embeddings + bi_embeddings
 
             # message dropout.
             # ego_embeddings = tf.nn.dropout(ego_embeddings, 1 - self.mess_dropout[k])
