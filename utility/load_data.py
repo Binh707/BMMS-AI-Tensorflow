@@ -98,7 +98,7 @@ class Data(object):
             d_inv[np.isinf(d_inv)] = 0.
             d_mat_inv = sp.diags(d_inv)
             norm_adj = d_mat_inv.dot(adj_mat)
-            # norm_adj = norm_adj.dot(d_mat_inv)
+            norm_adj = norm_adj.dot(d_mat_inv)
             print('generate pre adjacency matrix.')
             pre_adj_mat = norm_adj.tocsr()
             # norm_adj = adj_mat
