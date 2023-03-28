@@ -49,6 +49,7 @@ class Data(object):
         self.n_users += 1
         self.print_statistics()
         self.R = sp.dok_matrix((self.n_users, self.n_items), dtype=np.float32)
+        # self.R_zero = sp.dok_matrix((self.n_users, self.n_items), dtype=np.float32)
         self.train_items, self.test_set = {}, {}
         with open(train_file) as f_train:
             with open(test_file) as f_test:
@@ -100,8 +101,18 @@ class Data(object):
             norm_adj = d_mat_inv.dot(adj_mat)
             norm_adj = norm_adj.dot(d_mat_inv)
             print('generate pre adjacency matrix.')
-            pre_adj_mat = norm_adj.tocsr()
-            # norm_adj = adj_mat
+            
+            ###
+            user_adj_mat = sp.dok_matrix((self.n_users + self.n_items, self.n_users + self.n_items), dtype=np.float32)
+            user_adj_mat = user_adj_mat.tolil()
+            tmp_norm_adj = norm_adj.tolil()
+            for i in range(5):
+              user_adj_mat[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:] =\
+              tmp_norm_adj[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:]
+            user_adj_mat = user_adj_mat.todok()
+            pre_adj_mat = user_adj_mat.tocsr()
+            ###
+
             # pre_adj_mat = norm_adj.tocsr()
             sp.save_npz(self.path + '/s_pre_adj_mat.npz', norm_adj)
             
@@ -116,8 +127,10 @@ class Data(object):
         for i in range(5):
             adj_mat[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:] =\
             R[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5)]
+
             adj_mat[self.n_users:,int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5)] =\
             R[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5)].T
+
         adj_mat = adj_mat.todok()
         print('already create adjacency matrix', adj_mat.shape, time() - t1)
         
