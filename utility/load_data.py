@@ -102,18 +102,18 @@ class Data(object):
             norm_adj = norm_adj.dot(d_mat_inv)
             print('generate pre adjacency matrix.')
             
-            ###
-            user_adj_mat = sp.dok_matrix((self.n_users + self.n_items, self.n_users + self.n_items), dtype=np.float32)
-            user_adj_mat = user_adj_mat.tolil()
-            tmp_norm_adj = norm_adj.tolil()
-            for i in range(5):
-              user_adj_mat[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:] =\
-              tmp_norm_adj[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:]
-            user_adj_mat = user_adj_mat.todok()
-            pre_adj_mat = user_adj_mat.tocsr()
-            ###
+            # ###
+            # user_adj_mat = sp.dok_matrix((self.n_users + self.n_items, self.n_users + self.n_items), dtype=np.float32)
+            # user_adj_mat = user_adj_mat.tolil()
+            # tmp_norm_adj = norm_adj.tolil()
+            # for i in range(5):
+            #   user_adj_mat[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:] =\
+            #   tmp_norm_adj[int(self.n_users*i/5.0):int(self.n_users*(i+1.0)/5), self.n_users:]
+            # user_adj_mat = user_adj_mat.todok()
+            # pre_adj_mat = user_adj_mat.tocsr()
+            # ###
 
-            # pre_adj_mat = norm_adj.tocsr()
+            pre_adj_mat = norm_adj.tocsr()
             sp.save_npz(self.path + '/s_pre_adj_mat.npz', norm_adj)
             
         return adj_mat, norm_adj_mat, mean_adj_mat,pre_adj_mat
