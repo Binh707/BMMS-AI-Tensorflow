@@ -94,7 +94,7 @@ class Data(object):
         except Exception:
             adj_mat = adj_mat
             rowsum = np.array(adj_mat.sum(1))
-            d_inv = np.power(rowsum, -1.0).flatten() #-0.5
+            d_inv = np.power(rowsum, -0.5).flatten() #-0.5
             
             d_inv[np.isinf(d_inv)] = 0.
             d_mat_inv = sp.diags(d_inv)

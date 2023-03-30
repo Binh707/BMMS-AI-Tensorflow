@@ -248,10 +248,10 @@ class LightGCN(object):
             ego_embeddings = side_embeddings
             all_embeddings += [ego_embeddings]
 
-        # all_embeddings=tf.stack(all_embeddings,1)
-        # all_embeddings=tf.reduce_mean(all_embeddings,axis=1,keepdims=False)
-        u_g_embeddings, _ = tf.split(all_embeddings[0], [self.n_users, self.n_items], 0)
-        _, i_g_embeddings = tf.split(all_embeddings[1], [self.n_users, self.n_items], 0)
+        all_embeddings=tf.stack(all_embeddings,1)
+        all_embeddings=tf.reduce_mean(all_embeddings,axis=1,keepdims=False)
+        u_g_embeddings, i_g_embeddings = tf.split(all_embeddings, [self.n_users, self.n_items], 0)
+        # _, i_g_embeddings = tf.split(all_embeddings[1], [self.n_users, self.n_items], 0)
         return u_g_embeddings, i_g_embeddings
     
     def _create_ngcf_embed(self):
