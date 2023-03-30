@@ -247,8 +247,9 @@ class LightGCN(object):
             side_embeddings = tf.concat(temp_embed, 0)
             ego_embeddings = side_embeddings
             
-            if k % 2==0:
-              all_embeddings += [ego_embeddings]
+            all_embeddings += [ego_embeddings]
+            # if k % 2==0:
+            #   all_embeddings += [ego_embeddings]
 
         all_embeddings=tf.stack(all_embeddings,1)
         all_embeddings=tf.reduce_mean(all_embeddings,axis=1,keepdims=False)
