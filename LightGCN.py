@@ -236,7 +236,8 @@ class LightGCN(object):
             A_fold_hat = self._split_A_hat(self.norm_adj)
         
         ego_embeddings = tf.concat([self.weights['user_embedding'], self.weights['item_embedding']], axis=0)
-        all_embeddings = [ego_embeddings]
+        even_all_embeddings = [ego_embeddings]
+        odd_all_embeddings = []
         
         for k in range(0, self.n_layers):
 
@@ -247,13 +248,23 @@ class LightGCN(object):
             side_embeddings = tf.concat(temp_embed, 0)
             ego_embeddings = side_embeddings
             
-            all_embeddings += [1/(k+2) * ego_embeddings]
-            # if k % 2==0:
-            #   all_embeddings += [ego_embeddings]
+            #all_embeddings += [ego_embeddings]
+            if k % 2==0:
+              odd_all_embeddings += [ego_embeddings]
+            else:
+              even_all_embeddings += [ego_embeddings]
 
-        all_embeddings=tf.stack(all_embeddings,1)
-        # all_embeddings=tf.reduce_mean(all_embeddings,axis=1,keepdims=False)
-        all_embeddings=tf.reduce_sum(all_embeddings,axis=1,keepdims=False)
+        even_all_embeddings=tf.stack(even_all_embeddings,1)
+        even_all_embeddings=tf.reduce_mean(even_all_embeddings,axis=1,keepdims=False)
+
+        odd_all_embeddings=tf.stack(odd_all_embeddings,1)
+        odd_all_embeddings=tf.reduce_mean(odd_all_embeddings,axis=1,keepdims=False)
+
+        all_embeddings = []
+        all_embeddings += [odd_all_embeddings]
+        all_embeddings += [even_all_embeddings]
+        all_embeddings = tf.concat(all_embeddings, 1)
+
         u_g_embeddings, i_g_embeddings = tf.split(all_embeddings, [self.n_users, self.n_items], 0)
         # _, i_g_embeddings = tf.split(all_embeddings[1], [self.n_users, self.n_items], 0)
         return u_g_embeddings, i_g_embeddings
