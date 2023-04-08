@@ -239,8 +239,8 @@ class LightGCN(object):
         # even_all_embeddings = [ego_embeddings]
         # odd_all_embeddings = []
 
-        #all_embeddings = [ego_embeddings]
-        all_embeddings = []
+        all_embeddings = [ego_embeddings]
+        # all_embeddings = []
         for k in range(0, self.n_layers):
 
             temp_embed = []
@@ -267,10 +267,12 @@ class LightGCN(object):
         # all_embeddings += [even_all_embeddings]
         # all_embeddings = tf.concat(all_embeddings, 1)
 
+        tmp_u_g_embeddings, i_g_embeddings = tf.split(all_embeddings[0], [self.n_users, self.n_items], 0)
+
         all_embeddings=tf.stack(all_embeddings,1)
         all_embeddings=tf.reduce_mean(all_embeddings,axis=1,keepdims=False)
 
-        u_g_embeddings, i_g_embeddings = tf.split(all_embeddings, [self.n_users, self.n_items], 0)
+        u_g_embeddings, tmp_i_g_embeddings = tf.split(all_embeddings, [self.n_users, self.n_items], 0)
         # _, i_g_embeddings = tf.split(all_embeddings[1], [self.n_users, self.n_items], 0)
         return u_g_embeddings, i_g_embeddings
     
